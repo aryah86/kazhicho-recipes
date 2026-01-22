@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ title }} – {{ category }}</title>
+
+  <!-- Google Fonts - Crimson Text for titles, Nunito for body -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Crimson+Text:wght@400;600;700&family=Nunito:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="layout">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <img src="logo1.png" alt="Kazhicho Logo" class="sidebar-logo" />
+        <div>
+          <div class="sidebar-title">Kazhicho Recipe Book</div>
+          <div class="sidebar-subtitle">Browse by category</div>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        {% for cat, recipes in nav|dictsort %}
+        <div class="sidebar-section">
+          <div class="sidebar-section-title">{{ cat }}</div>
+          <ul class="sidebar-list">
+            {% for r in recipes %}
+            <li>
+              <a
+                href="{{ r.slug }}.html"
+                class="sidebar-link {% if r.slug == slug %}is-active{% endif %}"
+              >
+                {{ r.title }}
+              </a>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+        {% endfor %}
+      </nav>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <div class="layout-main">
+      <div class="page-shell">
+        <header class="app-header">
+          <img src="logo1.png" alt="Kazhicho Logo" class="header-logo" />
+          <div class="app-title">
+            <span class="app-name">Kazhicho</span>
+            <span class="app-sub">Curated Healthy Family Meals</span>
+          </div>
+          <div class="slug-chip">
+            <span>#{{ slug }}</span>
+          </div>
+        </header>
+
+        <main class="recipe-page">
+          <!-- HERO -->
+          <section class="hero-card">
+            <div class="hero-text">
+              <div class="category-pill">{{ category }}</div>
+
+              <h1 class="recipe-title">{{ title }}</h1>
+              <p class="recipe-subtitle">
+                {{ short_description }}
+              </p>
+
+              <div class="meta-row">
+                <div class="meta-block">
+                  <span class="meta-label">Prep</span>
+                  <span class="meta-value">{{ prep_time }}</span>
+                </div>
+                <div class="meta-block">
+                  <span class="meta-label">Cook</span>
+                  <span class="meta-value">{{ cook_time }}</span>
+                </div>
+                <div class="meta-block">
+                  <span class="meta-label">Servings</span>
+                  <span class="meta-value">{{ servings }}</span>
+                </div>
+              </div>
+
+              {% if tags %}
+              <div class="tag-row">
+                {% for tag in tags %}
+                <span class="tag-chip">{{ tag }}</span>
+                {% endfor %}
+              </div>
+              {% endif %}
+            </div>
+
+            <div class="hero-image-wrap">
+              <div class="hero-image-card">
+                <img
+                  src="{{ image_url }}"
+                  alt="{{ title }}"
+                  class="hero-image"
+                />
+              </div>
+              <div class="image-note">
+                <span class="dot"></span>
+                <span>Visual reference only</span>
+              </div>
+            </div>
+          </section>
+
+          <!-- CONTENT GRID -->
+          <section class="content-grid">
+            <!-- LEFT: Ingredients & Health note -->
+            <div class="left-column">
+              <div class="card ingredients-card">
+                <h2 class="section-heading">Ingredients</h2>
+                <ul class="ingredient-list">
+                  {% for item in ingredients %}
+                  <li>{{ item }}</li>
+                  {% endfor %}
+                </ul>
+              </div>
+
+              {% if health_note %}
+              <div class="card health-card">
+                <h2 class="section-heading">Health Note</h2>
+                <p class="body-text">
+                  {{ health_note }}
+                </p>
+              </div>
+              {% endif %}
+
+              {% if benefits %}
+              <div class="card benefits-card">
+                <h2 class="section-heading">Benefits</h2>
+                <p class="body-text">
+                  {{ benefits }}
+                </p>
+              </div>
+              {% endif %}
+            </div>
+
+            <!-- RIGHT: Instructions & source -->
+            <div class="right-column">
+              <div class="card steps-card">
+                <div class="steps-header">
+                  <h2 class="section-heading">Instructions</h2>
+                  <span class="steps-pill">{{ instructions|length }} steps</span>
+                </div>
+                <ol class="steps-list">
+                  {% for step in instructions %}
+                  <li>
+                    <div class="step-number">{{ loop.index }}</div>
+                    <div class="step-body">
+                      {{ step }}
+                    </div>
+                  </li>
+                  {% endfor %}
+                </ol>
+              </div>
+
+              {% if source %}
+              <div class="card source-card">
+                <h3 class="section-subheading">Source / Notes</h3>
+                <p class="body-text">{{ source }}</p>
+              </div>
+              {% endif %}
+            </div>
+          </section>
+        </main>
+
+        <footer class="page-footer">
+          <button class="secondary-btn" onclick="window.scrollTo({ top: 0, behavior: 'smooth' })">
+            Back to top
+          </button>
+        </footer>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
